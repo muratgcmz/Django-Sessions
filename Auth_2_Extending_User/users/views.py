@@ -44,8 +44,15 @@ def user_login(request):
     form = AuthenticationForm(request, data=request.POST)
     
     if form.is_valid():
+        # username = form.cleaned_data.get('username')
+        # password = form.cleaned_data.get('password')
+        # user = authenticate(username=username, password=password)
+
         user = form.get_user()
-        login(request, user)
-        return redirect('home')
+
+        if user :
+            messages.success(request, 'login successfull')
+            login(request, user)
+            return redirect('home')
 
     return render(request, 'users/user_login.html',{"form": form})
