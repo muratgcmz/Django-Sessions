@@ -6,6 +6,8 @@ from rest_framework import serializers
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+from apiTodo.pagination import SmallPageNumberPagination, LargePageNumberPagination
 from .models import Todo
 from .serializers import TodoSerializer
 from rest_framework.views import APIView
@@ -168,10 +170,12 @@ class TodoMVS(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
-    @action(methods=["GET"], detail=False)
-    def todo_count(self, request):
-        todo_count = Todo.objects.filter(done=False).count()
-        count = {
-            'undo-todos': todo_count
-        }
-        return Response(count)
+    pagination_class = SmallPageNumberPagination
+
+    # @action(methods=["GET"], detail=False)
+    # def todo_count(self, request):
+    #     todo_count = Todo.objects.filter(done=False).count()
+    #     count = {
+    #         'undo-todos': todo_count
+    #     }
+    #     return Response(count)
