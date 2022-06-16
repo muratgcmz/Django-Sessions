@@ -7,10 +7,12 @@ from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from apiTodo.pagination import SmallPageNumberPagination, LargePageNumberPagination
+from apiTodo.pagination import MyLimitOffsetPagination, MycursorPagination, SmallPageNumberPagination, LargePageNumberPagination
 from .models import Todo
 from .serializers import TodoSerializer
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, routers
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
@@ -166,11 +168,26 @@ class TodoMVS(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
-class TodoMVS(viewsets.ModelViewSet):
-    queryset = Todo.objects.all()
-    serializer_class = TodoSerializer
 
-    pagination_class = SmallPageNumberPagination
+
+    
+
+    # pagination_class = SmallPageNumberPagination
+    # pagination_class = MyLimitOffsetPagination
+    # pagination_class = MycursorPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['task', "priority"]
+    search_fields = ['task' ]
+    ordering_fields = ['task', ]
+
+
+
+    # def get_queryset(self):
+    #     queryset = Todo.objects.all()
+    #     priority = self.request.query_params.get('priority')
+    #     if priority is not None:
+    #         queryset = queryset.filter(priority=priority)
+    #     return queryset
 
     # @action(methods=["GET"], detail=False)
     # def todo_count(self, request):
