@@ -19,6 +19,25 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 # Create your views here.
+
+#! Auth and Permission
+
+from rest_framework.permissions import (
+    IsAuthenticated,
+    AllowAny,
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly,
+    DjangoModelPermissions,
+)
+
+
+
+
+
+
+
+
+
 def home(request):
     return HttpResponse(
         '<center><h1 style="background-color:powderblue;">Welcome to ApiTodo</h1></center>'
@@ -165,6 +184,7 @@ def todoDelete(request, pk):
 #     lookup_field = "id"
 
 class TodoMVS(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions,)
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
